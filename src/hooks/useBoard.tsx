@@ -31,7 +31,7 @@ function getInitialBoard() {
 function useBoard() {
     const [board, setBoard] = useState<BoardType>(getInitialBoard);
 
-    function shiftLeft() {
+    function getLeftShiftedBoard(board: BoardType) {
         let newBoard: BoardType = [];
 
         for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
@@ -40,7 +40,7 @@ function useBoard() {
             for (let colIndex = 0; colIndex < 3; colIndex++) {
                 if (board[rowIndex][colIndex] === null) continue;
 
-                if (newBoard[rowIndex].length === 0 || board[rowIndex][colIndex]!.value !== newBoard[rowIndex].at(-1)!.value) {
+                if (newBoard[rowIndex].length === 0 || board[rowIndex][colIndex]!.value !== newBoard[rowIndex].at(-1)!.value || newBoard[rowIndex].at(-1)!.animationClass === 'merged') {
                     newBoard[rowIndex].push({ ...(board[rowIndex][colIndex] as TileType), animationClass: 'moved' });
                 }
                 else {
@@ -53,8 +53,23 @@ function useBoard() {
         }
 
         if(!isBoardConfigurationSame(board, newBoard)) placeRandomTile(newBoard);
-        setBoard(newBoard);
-        console.log(newBoard)
+        return newBoard;
+    }
+
+    function shiftLeft() {
+        setBoard(getLeftShiftedBoard(board));
+    }
+
+    function getInvertedBoard(board: BoardType) {
+        let newBoard = structuredClone(board);
+
+        for(let i = 0; i < 3; i++) {
+            let temp = board[i][0];
+            newBoard[i][0] = newBoard[i][2];
+            newBoard[i][2] = temp;
+        }
+
+        return newBoard;
     }
 
     function isBoardConfigurationSame(boardA: BoardType, boardB: BoardType) {
@@ -85,7 +100,43 @@ function useBoard() {
         }
     }
 
-    return { board, shiftLeft }
+    function shiftRight() {
+        setBoard(getInvertedBoard(getLeftShiftedBoard(getInvertedBoard(board))));
+    }
+
+    function getTransposedBoard(board: BoardType) {
+        const newBoard: BoardType = [];
+        for(let i = 0; i < 3; i++) {
+            newBoard.push([]);
+            for(let j = 0; j < 3; j++) {
+                newBoard[i][j] = board[j][i];
+            }
+        }
+
+        return newBoard;
+    }
+
+    function getInvertedTransposedBoard(board: BoardType) {
+        const newBoard: BoardType = [];
+        for(let i = 0; i < 3; i++) {
+            newBoard.push([]);
+            for(let j = 0; j < 3; j++) {
+                newBoard[i][j] = board[2-j][2-i];
+            }
+        }
+
+        return newBoard;
+    }
+
+    function shiftUp() {
+        setBoard(getTransposedBoard(getLeftShiftedBoard(getTransposedBoard(board))));
+    }
+
+    function shiftDown() {
+        setBoard(getInvertedTransposedBoard(getLeftShiftedBoard(getInvertedTransposedBoard(board))));
+    }
+
+    return { board, shiftLeft, shiftRight, shiftUp, shiftDown }
 }
 
 export default useBoard

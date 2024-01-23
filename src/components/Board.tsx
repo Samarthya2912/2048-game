@@ -3,20 +3,26 @@ import useBoard from '../hooks/useBoard'
 import Tile from './Tile';
 
 function Board() {
-    const { board, shiftLeft } = useBoard();
+    const { board, shiftLeft, shiftRight, shiftUp, shiftDown } = useBoard();
 
     useEffect(() => {
         function keyDownHandler(e: globalThis.KeyboardEvent) {
             console.log(e.key)
             if(e.key === "ArrowLeft") {
                 shiftLeft();
+            } else if(e.key === "ArrowRight") {
+                shiftRight();
+            } else if(e.key === "ArrowUp") {
+                shiftUp();
+            } else if(e.key === "ArrowDown") {
+                shiftDown();
             }
         }
 
         document.addEventListener('keydown', keyDownHandler)
 
         return () => document.removeEventListener('keydown', keyDownHandler);
-    }, [shiftLeft])
+    }, [shiftLeft, shiftRight])
 
     return (
         <div className="board">
