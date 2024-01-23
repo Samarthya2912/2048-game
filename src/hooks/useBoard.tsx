@@ -7,8 +7,10 @@ export type TileType = {
     id: string
 }
 
+type BoardType = (TileType | null)[][]
+
 function getInitialBoard() {
-    const board: (TileType | null)[][] = [];
+    const board: BoardType = [];
 
     for (let i = 0; i < 3; i++) {
         board.push([]);
@@ -27,13 +29,34 @@ function getInitialBoard() {
 }
 
 function useBoard() {
-    const [tiles, setTiles] = useState<(TileType | null)[][]>(getInitialBoard);
+    const [board, setBoard] = useState<BoardType>(getInitialBoard);
 
     function shiftLeft() {
+        let newBoard: BoardType = [];
 
+        for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
+            newBoard.push([]);
+
+            for (let colIndex = 0; colIndex < 3; colIndex++) {
+                if (board[rowIndex][colIndex] === null) continue;
+
+                if (newBoard[rowIndex].length === 0 || board[rowIndex][colIndex]!.value !== newBoard[rowIndex].at(-1)!.value) {
+                    newBoard[rowIndex].push({ ...(board[rowIndex][colIndex] as TileType), animationClass: 'moved' });
+                } 
+                else {
+                    newBoard[rowIndex][newBoard[rowIndex].length-1]!.value *= 2;
+                    newBoard[rowIndex][newBoard[rowIndex].length-1]!.animationClass = 'merged';
+                }
+            }
+
+            while(newBoard[rowIndex].length < 3) newBoard[rowIndex].push(null);
+        }
+
+        setBoard(newBoard);
+        console.log(newBoard)
     }
 
-    return { tiles }
+    return { board, shiftLeft }
 }
 
 export default useBoard
