@@ -17,7 +17,7 @@ function getInitialBoard() {
         for (let j = 0; j < 3; j++) {
             if (i === 0 && (j === 0 || j === 2)) {
                 board[i].push({
-                    value: 2, id: uuidv4()
+                    value: 2, id: uuidv4(), animationClass: 'new'
                 })
             } else {
                 board[i].push(null);
@@ -42,18 +42,47 @@ function useBoard() {
 
                 if (newBoard[rowIndex].length === 0 || board[rowIndex][colIndex]!.value !== newBoard[rowIndex].at(-1)!.value) {
                     newBoard[rowIndex].push({ ...(board[rowIndex][colIndex] as TileType), animationClass: 'moved' });
-                } 
+                }
                 else {
-                    newBoard[rowIndex][newBoard[rowIndex].length-1]!.value *= 2;
-                    newBoard[rowIndex][newBoard[rowIndex].length-1]!.animationClass = 'merged';
+                    newBoard[rowIndex][newBoard[rowIndex].length - 1]!.value *= 2;
+                    newBoard[rowIndex][newBoard[rowIndex].length - 1]!.animationClass = 'merged';
                 }
             }
 
-            while(newBoard[rowIndex].length < 3) newBoard[rowIndex].push(null);
+            while (newBoard[rowIndex].length < 3) newBoard[rowIndex].push(null);
         }
 
+        if(!isBoardConfigurationSame(board, newBoard)) placeRandomTile(newBoard);
         setBoard(newBoard);
         console.log(newBoard)
+    }
+
+    function isBoardConfigurationSame(boardA: BoardType, boardB: BoardType) {
+        for(let i = 0; i < 3; i++) {
+            for(let j = 0; j < 3; j++) {
+                if(boardA[i][j] === null && boardB[i][j] !== null) return false;
+                else if(boardA[i][j] !== null && boardB[i][j] === null) return false;
+                else if(boardA[i][j]?.id !== boardB[i][j]?.id) return false;
+            }
+        }
+
+        return true;
+    }
+
+    function placeRandomTile(board: BoardType) {
+        const freeIndices = [];
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board[i][j] === null) freeIndices.push({ x: i, y: j });
+            }
+        }
+
+        let randomTileIndex = Math.floor(Math.random() * freeIndices.length);
+        board[freeIndices[randomTileIndex].x][freeIndices[randomTileIndex].y] = {
+            value: 2,
+            id: uuidv4(),
+            animationClass: 'new'
+        }
     }
 
     return { board, shiftLeft }
