@@ -8,7 +8,6 @@ function Board() {
 
     useEffect(() => {
         function keyDownHandler(e: globalThis.KeyboardEvent) {
-            console.log(e.key)
             if (e.key === "ArrowLeft") {
                 shiftLeft();
             } else if (e.key === "ArrowRight") {
@@ -32,11 +31,13 @@ function Board() {
                     board.map((boardRow, rowIndex) => {
                         return <div className='board-row' key={rowIndex}>
                             {boardRow.map((tile, colIndex) => tile ?
-                                <Tile key={tile.id} rowIndex={rowIndex} colIndex={colIndex} {...tile} /> : <EmptyTile rowIndex={rowIndex} colIndex={colIndex} />)}
+                                <Tile key={tile.id} rowIndex={rowIndex} colIndex={colIndex} {...tile} /> :
+                                <EmptyTile rowIndex={rowIndex} colIndex={colIndex} />)}
                         </div>
                     })
                 }
-            </div></>
+            </div>
+        </>
     )
 }
 
