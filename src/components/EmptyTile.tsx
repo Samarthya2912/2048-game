@@ -1,14 +1,13 @@
 import React from 'react'
-import { TileType } from '../hooks/useBoard'
 
-type TileProps = TileType & {
+type EmptyTileProps = {
     rowIndex: number,
     colIndex: number
 }
 
-function Tile({ rowIndex, colIndex, ...tile }: TileProps) {
+function EmptyTile({ rowIndex, colIndex }: EmptyTileProps) {
     return (
-        <div className={`tile ${tile.animationClass}`} style={{
+        <div className={`tile`} style={{
             position: 'absolute',
             height: '50px',
             width: '50px',
@@ -18,9 +17,8 @@ function Tile({ rowIndex, colIndex, ...tile }: TileProps) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            // transition: 'left 1s ease, top 1s ease'
-        }}>{tile.value}</div>
+        }}></div>
     )
 }
 
-export default Tile
+export default EmptyTile

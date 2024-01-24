@@ -41,7 +41,11 @@ function useBoard() {
                 if (board[rowIndex][colIndex] === null) continue;
 
                 if (newBoard[rowIndex].length === 0 || board[rowIndex][colIndex]!.value !== newBoard[rowIndex].at(-1)!.value || newBoard[rowIndex].at(-1)!.animationClass === 'merged') {
-                    newBoard[rowIndex].push({ ...(board[rowIndex][colIndex] as TileType), animationClass: 'moved' });
+                    newBoard[rowIndex].push({
+                        ...(board[rowIndex][colIndex] as TileType),
+                    });
+
+                    if(colIndex + 1 === newBoard[rowIndex].length) newBoard[rowIndex][newBoard[rowIndex].length-1]!.animationClass = 'moved';
                 }
                 else {
                     newBoard[rowIndex][newBoard[rowIndex].length - 1]!.value *= 2;
@@ -52,7 +56,7 @@ function useBoard() {
             while (newBoard[rowIndex].length < 3) newBoard[rowIndex].push(null);
         }
 
-        if(!isBoardConfigurationSame(board, newBoard)) placeRandomTile(newBoard);
+        if (!isBoardConfigurationSame(board, newBoard)) placeRandomTile(newBoard);
         return newBoard;
     }
 
@@ -61,23 +65,24 @@ function useBoard() {
     }
 
     function getInvertedBoard(board: BoardType) {
-        let newBoard = structuredClone(board);
+        let newBoard: BoardType = [];
 
-        for(let i = 0; i < 3; i++) {
-            let temp = board[i][0];
-            newBoard[i][0] = newBoard[i][2];
-            newBoard[i][2] = temp;
+        for (let i = 0; i < 3; i++) {
+            newBoard.push([]);
+            for (let j = 0; j < 3; j++) {
+                newBoard[i].push(board[i][2 - j]);
+            }
         }
 
         return newBoard;
     }
 
     function isBoardConfigurationSame(boardA: BoardType, boardB: BoardType) {
-        for(let i = 0; i < 3; i++) {
-            for(let j = 0; j < 3; j++) {
-                if(boardA[i][j] === null && boardB[i][j] !== null) return false;
-                else if(boardA[i][j] !== null && boardB[i][j] === null) return false;
-                else if(boardA[i][j]?.id !== boardB[i][j]?.id) return false;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (boardA[i][j] === null && boardB[i][j] !== null) return false;
+                else if (boardA[i][j] !== null && boardB[i][j] === null) return false;
+                else if (boardA[i][j]?.id !== boardB[i][j]?.id) return false;
             }
         }
 
@@ -106,9 +111,9 @@ function useBoard() {
 
     function getTransposedBoard(board: BoardType) {
         const newBoard: BoardType = [];
-        for(let i = 0; i < 3; i++) {
+        for (let i = 0; i < 3; i++) {
             newBoard.push([]);
-            for(let j = 0; j < 3; j++) {
+            for (let j = 0; j < 3; j++) {
                 newBoard[i][j] = board[j][i];
             }
         }
@@ -118,10 +123,10 @@ function useBoard() {
 
     function getInvertedTransposedBoard(board: BoardType) {
         const newBoard: BoardType = [];
-        for(let i = 0; i < 3; i++) {
+        for (let i = 0; i < 3; i++) {
             newBoard.push([]);
-            for(let j = 0; j < 3; j++) {
-                newBoard[i][j] = board[2-j][2-i];
+            for (let j = 0; j < 3; j++) {
+                newBoard[i][j] = board[2 - j][2 - i];
             }
         }
 

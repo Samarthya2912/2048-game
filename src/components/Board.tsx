@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import useBoard from '../hooks/useBoard'
 import Tile from './Tile';
+import EmptyTile from './EmptyTile';
 
 function Board() {
     const { board, shiftLeft, shiftRight, shiftUp, shiftDown } = useBoard();
@@ -8,13 +9,13 @@ function Board() {
     useEffect(() => {
         function keyDownHandler(e: globalThis.KeyboardEvent) {
             console.log(e.key)
-            if(e.key === "ArrowLeft") {
+            if (e.key === "ArrowLeft") {
                 shiftLeft();
-            } else if(e.key === "ArrowRight") {
+            } else if (e.key === "ArrowRight") {
                 shiftRight();
-            } else if(e.key === "ArrowUp") {
+            } else if (e.key === "ArrowUp") {
                 shiftUp();
-            } else if(e.key === "ArrowDown") {
+            } else if (e.key === "ArrowDown") {
                 shiftDown();
             }
         }
@@ -22,20 +23,20 @@ function Board() {
         document.addEventListener('keydown', keyDownHandler)
 
         return () => document.removeEventListener('keydown', keyDownHandler);
-    }, [shiftLeft, shiftRight])
+    }, [shiftDown, shiftLeft, shiftRight, shiftUp])
 
     return (
-        <div className="board">
-            <h2>Board</h2>
-            {
-                board.map((boardRow, rowIndex) => {
-                    return <div className='board-row' key={rowIndex}>
-                        {boardRow.map((tile, colIndex) => tile &&
-                            <Tile key={tile.id} rowIndex={rowIndex} colIndex={colIndex} {...tile} />)}
-                    </div>
-                })
-            }
-        </div>
+        <>
+            <div className="board">
+                {
+                    board.map((boardRow, rowIndex) => {
+                        return <div className='board-row' key={rowIndex}>
+                            {boardRow.map((tile, colIndex) => tile ?
+                                <Tile key={tile.id} rowIndex={rowIndex} colIndex={colIndex} {...tile} /> : <EmptyTile rowIndex={rowIndex} colIndex={colIndex} />)}
+                        </div>
+                    })
+                }
+            </div></>
     )
 }
 
