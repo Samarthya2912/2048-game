@@ -30,7 +30,6 @@ body {
 .score {
   font-weight: bolder;
   font-size: xx-large;
-  margin-bottom: 1rem;
 }
 
 .board {
@@ -42,6 +41,7 @@ body {
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.3);
+  margin: 2rem;
 }
 
 .board-row {

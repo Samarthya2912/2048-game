@@ -33,6 +33,8 @@ function useBoard() {
     const [score, setScore] = useState(0);
     const [gameCompleted, setGameCompleted] = useState(false);
 
+    const WINNING_SCORE = 2048;
+
     const getInvertedBoard = useCallback((board: BoardType) => {
         let newBoard: BoardType = [];
 
@@ -119,7 +121,7 @@ function useBoard() {
                     newBoard[rowIndex][newBoard[rowIndex].length - 1]!.animationClass = 'merged';
                 }
 
-                if(newBoard[rowIndex].at(-1)!.value === 8) setGameCompleted(true);
+                if(newBoard[rowIndex].at(-1)!.value === WINNING_SCORE) setGameCompleted(true);
             }
 
             while (newBoard[rowIndex].length < 4) newBoard[rowIndex].push(null);
@@ -146,7 +148,13 @@ function useBoard() {
         setBoard(getInvertedTransposedBoard(getLeftShiftedBoard(getInvertedTransposedBoard(board))));
     }, [board, getInvertedTransposedBoard, getLeftShiftedBoard])
 
-    return { board, shiftLeft, shiftRight, shiftUp, shiftDown, score, gameCompleted }
+    const resetBoard = useCallback(() => {
+        setScore(0);
+        setGameCompleted(false);
+        setBoard(getInitialBoard());
+    }, [])
+
+    return { board, shiftLeft, shiftRight, shiftUp, shiftDown, score, gameCompleted, resetBoard }
 }
 
 export default useBoard

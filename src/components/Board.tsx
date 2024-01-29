@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import useBoard from '../hooks/useBoard'
 import Tile from './Tile';
+import { Button } from "baseui/button";
 
 function Board() {
-    const { board, shiftLeft, shiftRight, shiftUp, shiftDown, score, gameCompleted } = useBoard();
+    const { board, shiftLeft, shiftRight, shiftUp, shiftDown, score, gameCompleted, resetBoard } = useBoard();
 
     useEffect(() => {
         function keyDownHandler(e: globalThis.KeyboardEvent) {
-            if(gameCompleted) return;
+            if (gameCompleted) return;
 
             if (e.key === "ArrowLeft") {
                 shiftLeft();
@@ -38,6 +39,12 @@ function Board() {
                     })
                 }
             </div>
+            <Button
+                size="large"
+                onClick={resetBoard}
+            >
+                Reset
+            </Button>
         </div>
     )
 }
