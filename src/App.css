@@ -12,13 +12,36 @@ body {
   justify-content: center;
   flex-direction: column;
   width: 100vw;
+  --animation-duration: 1.25s
+}
+
+.tile {
+  border: solid black 2px;
+  height: 4rem;
+  width: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: .25em;
+  font-weight: bolder;
+  font-size: xx-large;
+}
+
+.score {
+  font-weight: bolder;
+  font-size: xx-large;
+  margin-bottom: 1rem;
 }
 
 .board {
-  position: relative;
-  width: 180px;
-  height: 180px;
-  /* border: solid red; */
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  background-color: antiquewhite;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.3);
 }
 
 .board-row {
@@ -27,7 +50,7 @@ body {
 
 .new {
   animation-name: new-tile-animation;
-  animation-duration: 1s;
+  animation-duration: var(--animation-duration);
 }
 
 @keyframes new-tile-animation {
@@ -49,7 +72,7 @@ body {
 
 .merged {
   animation-name: merged-tile-animation;
-  animation-duration: 1.25s;
+  animation-duration: var(--animation-duration);
 }
 
 @keyframes merged-tile-animation {

@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import useBoard from '../hooks/useBoard'
 import Tile from './Tile';
-import EmptyTile from './EmptyTile';
 
 function Board() {
-    const { board, shiftLeft, shiftRight, shiftUp, shiftDown } = useBoard();
+    const { board, shiftLeft, shiftRight, shiftUp, shiftDown, score, gameCompleted } = useBoard();
 
     useEffect(() => {
         function keyDownHandler(e: globalThis.KeyboardEvent) {
+            if(gameCompleted) return;
+
             if (e.key === "ArrowLeft") {
                 shiftLeft();
             } else if (e.key === "ArrowRight") {
@@ -22,22 +23,22 @@ function Board() {
         document.addEventListener('keydown', keyDownHandler)
 
         return () => document.removeEventListener('keydown', keyDownHandler);
-    }, [shiftDown, shiftLeft, shiftRight, shiftUp])
+    }, [shiftDown, shiftLeft, shiftRight, shiftUp, gameCompleted])
 
     return (
-        <>
+        <div className='board-wrapper'>
+            <div className="score">Score: {score}</div>
+            {gameCompleted && <h1>Yay! You won the game.</h1>}
             <div className="board">
                 {
                     board.map((boardRow, rowIndex) => {
                         return <div className='board-row' key={rowIndex}>
-                            {boardRow.map((tile, colIndex) => tile ?
-                                <Tile key={tile.id} rowIndex={rowIndex} colIndex={colIndex} {...tile} /> :
-                                <EmptyTile rowIndex={rowIndex} colIndex={colIndex} />)}
+                            {boardRow.map((tile, colIndex) => <Tile key={colIndex} {...tile} />)}
                         </div>
                     })
                 }
             </div>
-        </>
+        </div>
     )
 }
 
