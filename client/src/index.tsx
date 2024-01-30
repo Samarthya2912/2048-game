@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { Client as Styletron } from "styletron-engine-monolithic";
 import { Provider as StyletronProvider } from "styletron-react";
 import { LightTheme, BaseProvider } from "baseui";
+import AuthContextProvider from './contexts/AuthContextProvider';
+import { BrowserRouter } from 'react-router-dom';
 
 const engine = new Styletron();
 
@@ -16,7 +18,11 @@ root.render(
   <React.StrictMode>
     <StyletronProvider value={engine}>
       <BaseProvider theme={LightTheme}>
-        <App />
+        <AuthContextProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AuthContextProvider>
       </BaseProvider>
     </StyletronProvider>
   </React.StrictMode>
