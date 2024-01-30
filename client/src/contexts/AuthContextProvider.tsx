@@ -19,7 +19,7 @@ type AuthContextProviderValueType = {
 
 const authContext = createContext<AuthContextProviderValueType>({} as AuthContextProviderValueType);
 
-function AuthContextProvider({ children }: { children: ReactNode }) {
+function AuthContextProvider({ children }: { children: any }) {
     const [authState, setAuthState] = useState<AuthStateType>({
         id: null,
         username: null,

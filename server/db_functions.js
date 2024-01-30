@@ -17,9 +17,11 @@ function addUser(user) {
 }
 
 
-function getUserByUsername(username) {
+function authenticateUser(username, password) {
     const allUsers = getAllUsers();
-    return allUsers.find(user => user.username === username);
+    const user = allUsers.find(user => user.username === username);
+    if(!user || user.password !== password) throw new Error("Invalid credentials!")
+    return user;
 }
 
 function updateUser(username, new_user) {
@@ -52,7 +54,7 @@ function getLeaderboard() {
 module.exports = {
     getAllUsers,
     addUser,
-    getUserByUsername,
+    authenticateUser,
     updateUser,
     getLeaderboard
 }

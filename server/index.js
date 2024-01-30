@@ -1,14 +1,15 @@
 const express = require("express")
 const { graphqlHTTP } = require("express-graphql")
 const { buildSchema } = require("graphql")
-const { getAllUsers, addUser, getUserByUsername, updateUser, getLeaderboard } = require("./db_functions.js")
+const { getAllUsers, addUser, authenticateUser, updateUser, getLeaderboard } = require("./db_functions.js")
 const { v4: uuidv4 } = require('uuid');
+const cors = require("cors");
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(`
   type Query {
     all_users: [User]
-    user(username: String!): User
+    user(username: String!, password: String!): User
     leaderboard: [User]
   }
 
@@ -30,8 +31,8 @@ const root = {
     all_users: () => {
         return getAllUsers();
     },
-    user: ({ username }) => {
-        return getUserByUsername(username);
+    user: ({ username, password }) => {
+        return authenticateUser(username, password);
     },
     leaderboard: () => {
         return getLeaderboard();
@@ -51,6 +52,7 @@ const root = {
 }
 
 const app = express()
+app.use(cors());
 app.use(
     "/graphql",
     graphqlHTTP({

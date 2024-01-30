@@ -8,6 +8,8 @@ import { Provider as StyletronProvider } from "styletron-react";
 import { LightTheme, BaseProvider } from "baseui";
 import AuthContextProvider from './contexts/AuthContextProvider';
 import { BrowserRouter } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/client';
+import apolloClient from './contexts/ApolloProvider';
 
 const engine = new Styletron();
 
@@ -20,7 +22,9 @@ root.render(
       <BaseProvider theme={LightTheme}>
         <AuthContextProvider>
           <BrowserRouter>
-            <App />
+            <ApolloProvider client={apolloClient}>
+              <App />
+            </ApolloProvider>
           </BrowserRouter>
         </AuthContextProvider>
       </BaseProvider>
