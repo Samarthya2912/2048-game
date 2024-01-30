@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import useBoard from '../hooks/useBoard'
 import Tile from './Tile';
 import { Button } from "baseui/button";
+import Leaderboard from './Leaderboard';
 
 function Board() {
     const { board, shiftLeft, shiftRight, shiftUp, shiftDown, score, gameCompleted, resetBoard } = useBoard();
@@ -28,6 +29,7 @@ function Board() {
 
     return (
         <div className='board-wrapper'>
+            <Leaderboard />
             <div className="score">Score: {score}</div>
             {gameCompleted && <h1>Yay! You won the game.</h1>}
             <div className="board">
